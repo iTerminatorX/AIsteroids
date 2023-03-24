@@ -17,7 +17,7 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
         # Calculate the new position based on the bullet's angle and speed
         dx = math.sin(math.radians(self.angle)) * self.speed / FPS
-        dy = -math.cos(math.radians(self.angle)) * self.speed / FPS  # Note the negative sign, as Pygame's y-axis is inverted
+        dy = -math.cos(math.radians(self.angle)) * self.speed / FPS  
 
         # Update the bullet's position
         self.rect.x += dx

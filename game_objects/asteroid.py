@@ -28,7 +28,6 @@ class Asteroid(pygame.sprite.Sprite):
     def update(self):
         self.rotate()
         self.move()
-        self.check_collision()
 
         # Remove the asteroid if it goes off-screen
         if self.rect.right < 0 or self.rect.left > WIDTH or self.rect.top > HEIGHT or self.rect.bottom < 0:

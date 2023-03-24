@@ -1,13 +1,18 @@
 import pygame
 import math
 
+from config import HEIGHT, WIDTH, FPS
 from game_objects.bullet import Bullet
 
 class Ship(pygame.sprite.Sprite):
     def __init__(self, x, y, image, bullet_img):
         super().__init__()
-        self.original_image = pygame.image.load(image)
+        self.original_image = pygame.image.load(image).convert_alpha()
+        
         self.original_image = pygame.transform.scale(self.original_image, (64, 64))
+        # Convert the original image to a 32-bit format with an alpha channel
+        self.original_image = self.original_image.convert_alpha()
+        
         self.image = self.original_image.copy()
         self.bullet_img = bullet_img
         self.rect = self.image.get_rect()
@@ -27,6 +32,9 @@ class Ship(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
+        self.rect.x = max(0, min(self.rect.x, WIDTH - self.rect.width))
+        self.rect.y = max(0, min(self.rect.y, HEIGHT - self.rect.height))
+
     def rotate(self, delta_angle):
         self.angle += delta_angle
         self.angle %= 360
@@ -39,7 +47,7 @@ class Ship(pygame.sprite.Sprite):
         speed = 8
         dx = math.sin(math.radians(self.angle)) * speed
         dy = -math.cos(math.radians(self.angle)) * speed  # Note the negative sign, as Pygame's y-axis is inverted
-
+        
         # Update the ship's position
         self.rect.x += dx
         self.rect.y += dy
