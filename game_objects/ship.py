@@ -1,5 +1,6 @@
 import pygame
 import math
+
 from game_objects.bullet import Bullet
 
 class Ship(pygame.sprite.Sprite):

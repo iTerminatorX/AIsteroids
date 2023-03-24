@@ -1,28 +1,25 @@
 import pygame
 import sys
+import random
+
 from game_objects.ship import Ship
 from game_objects.asteroid import Asteroid
-import random
+from config import HEIGHT, WIDTH, FPS
 
 pygame.init()
 
-# Screen settings
-WIDTH, HEIGHT = 1920, 1000
-FPS = 60
-
 # Create the game window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Asteroids")
+pygame.display.set_caption("AIsteroids")
 clock = pygame.time.Clock()
 
 # Load assets
+background_img = pygame.image.load("assets/background.jpg")
+background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
 ship_img = "assets/spaceship.png"
 bullet_img = "assets/bullet.png"
 asteroid_img_1 = "assets/asteroid_1.png"
 asteroid_img_2 = "assets/asteroid_2.png"
-
-background_img = pygame.image.load("assets/background.jpg")
-background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
 
 # Create game objects
 ship = Ship(WIDTH // 2, HEIGHT // 2, ship_img, bullet_img)
@@ -48,12 +45,11 @@ def spawn_asteroid():
 
     # Create an asteroid and add it to the sprite group
     asteroid_img = random.choice([asteroid_img_1, asteroid_img_2])
-    asteroid = Asteroid(x, y, asteroid_img, ship.rect.x, ship.rect.y)  # Pass the ship's position as target
+    asteroid = Asteroid(x, y, asteroid_img, ship.rect.x, ship.rect.y)
     all_sprites.add(asteroid)
 
 # Main game loop
 running = True
-spawn_counter = 0
 spawn_timer = 0
 spawn_interval = FPS // 2
 
@@ -65,11 +61,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    # Update game objects
-    spawn_counter += 1
-    if spawn_counter % 120 == 0:  # Spawn an asteroid every 2 seconds (assuming 60 FPS)
-        spawn_asteroid()
-
     # Update game objects
     spawn_timer += 1
     if spawn_timer % spawn_interval == 0:

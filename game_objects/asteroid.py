@@ -2,8 +2,7 @@ import pygame
 import math
 import random
 
-WIDTH, HEIGHT = 1920, 1000
-FPS = 60
+from config import HEIGHT, WIDTH, FPS
 
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self, x, y, image, target_x, target_y):
