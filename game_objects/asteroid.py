@@ -2,6 +2,7 @@ import pygame
 import math
 import random
 
+WIDTH, HEIGHT = 1920, 1000
 FPS = 60
 
 class Asteroid(pygame.sprite.Sprite):
@@ -29,6 +30,10 @@ class Asteroid(pygame.sprite.Sprite):
         self.rotate()
         self.move()
         self.check_collision()
+
+        # Remove the bullet if it goes off-screen
+        if self.rect.right < 0 or self.rect.left > WIDTH or self.rect.top > HEIGHT or self.rect.bottom < 0:
+            self.kill()
 
     def move(self):
         # Move the asteroid towards the target

@@ -1,12 +1,14 @@
 import pygame
 import math
+from game_objects.bullet import Bullet
 
 class Ship(pygame.sprite.Sprite):
-    def __init__(self, x, y, image):
+    def __init__(self, x, y, image, bullet_img):
         super().__init__()
         self.original_image = pygame.image.load(image)
-        #self.original_image = pygame.transform.scale(self.original_image, (64, 64))
+        self.original_image = pygame.transform.scale(self.original_image, (64, 64))
         self.image = self.original_image.copy()
+        self.bullet_img = bullet_img
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -42,5 +44,6 @@ class Ship(pygame.sprite.Sprite):
         self.rect.y += dy
 
     def shoot(self):
-        # Add logic to create and shoot bullets
-        pass
+        bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.bullet_img)
+        return bullet
+

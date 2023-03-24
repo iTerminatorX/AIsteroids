@@ -16,15 +16,16 @@ pygame.display.set_caption("Asteroids")
 clock = pygame.time.Clock()
 
 # Load assets
-ship_img = "assets/spaceship2.png"
-asteroid_img_1 = "assets/asteroid2.png"
-asteroid_img_2 = "assets/asteroid3.png"
+ship_img = "assets/spaceship.png"
+bullet_img = "assets/bullet.png"
+asteroid_img_1 = "assets/asteroid_1.png"
+asteroid_img_2 = "assets/asteroid_2.png"
 
-background_img = pygame.image.load("assets/background4.jpg")
+background_img = pygame.image.load("assets/background.jpg")
 background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
 
 # Create game objects
-ship = Ship(WIDTH // 2, HEIGHT // 2, ship_img)
+ship = Ship(WIDTH // 2, HEIGHT // 2, ship_img, bullet_img)
 all_sprites = pygame.sprite.Group()
 all_sprites.add(ship)
 
@@ -54,7 +55,7 @@ def spawn_asteroid():
 running = True
 spawn_counter = 0
 spawn_timer = 0
-spawn_interval = FPS // 1
+spawn_interval = FPS // 2
 
 while running:
     clock.tick(FPS)
@@ -74,6 +75,12 @@ while running:
     if spawn_timer % spawn_interval == 0:
         spawn_asteroid()
     all_sprites.update()
+
+    # Check for bullet firing
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_SPACE]:
+        bullet = ship.shoot()
+        all_sprites.add(bullet)
 
     # Draw the background image
     screen.blit(background_img, (0, 0))
