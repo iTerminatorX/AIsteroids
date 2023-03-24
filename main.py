@@ -17,9 +17,10 @@ clock = pygame.time.Clock()
 
 # Load assets
 ship_img = "assets/spaceship2.png"
-asteroid_img = "assets/asteroid2.png"
+asteroid_img_1 = "assets/asteroid2.png"
+asteroid_img_2 = "assets/asteroid3.png"
 
-background_img = pygame.image.load("assets/background.jpg")
+background_img = pygame.image.load("assets/background4.jpg")
 background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
 
 # Create game objects
@@ -45,6 +46,7 @@ def spawn_asteroid():
         y = HEIGHT
 
     # Create an asteroid and add it to the sprite group
+    asteroid_img = random.choice([asteroid_img_1, asteroid_img_2])
     asteroid = Asteroid(x, y, asteroid_img, ship.rect.x, ship.rect.y)  # Pass the ship's position as target
     all_sprites.add(asteroid)
 

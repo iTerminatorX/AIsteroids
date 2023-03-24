@@ -9,7 +9,7 @@ class Asteroid(pygame.sprite.Sprite):
         super().__init__()
         self.original_image = pygame.image.load(image)
         #self.original_image = pygame.transform.scale(self.original_image, (64, 64))
-        self.size = random.randint(16, 128)
+        self.size = random.randint(32, 80)
         self.original_image = pygame.transform.scale(self.original_image, (self.size, self.size))
         self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
