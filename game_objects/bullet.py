@@ -1,8 +1,7 @@
 import pygame
 import math
 
-WIDTH, HEIGHT = 1920, 1000
-FPS = 60
+from config import HEIGHT, WIDTH, FPS
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, angle, image, speed=800):
