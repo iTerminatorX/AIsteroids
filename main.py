@@ -6,79 +6,92 @@ from game_objects.ship import Ship
 from game_objects.asteroid import Asteroid
 from config import HEIGHT, WIDTH, FPS
 
-pygame.init()
+class Game:
+    def __init__(self):
+        pygame.init()
 
-# Create the game window
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("AIsteroids")
-clock = pygame.time.Clock()
+        # Create the game window
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("AIsteroids")
+        self.clock = pygame.time.Clock()
 
-# Load assets
-background_img = pygame.image.load("assets/background.jpg")
-background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
-ship_img = "assets/spaceship.png"
-bullet_img = "assets/bullet.png"
-asteroid_img_1 = "assets/asteroid_1.png"
-asteroid_img_2 = "assets/asteroid_2.png"
+        # Load assets
+        self.background_img = pygame.image.load("assets/background.jpg")
+        self.background_img = pygame.transform.scale(self.background_img, (WIDTH, HEIGHT))
+        self.ship_img = "assets/spaceship.png"
+        self.bullet_img = "assets/bullet.png"
+        self.asteroid_img_1 = "assets/asteroid_1.png"
+        self.asteroid_img_2 = "assets/asteroid_2.png"
 
-# Create game objects
-ship = Ship(WIDTH // 2, HEIGHT // 2, ship_img, bullet_img)
-all_sprites = pygame.sprite.Group()
-all_sprites.add(ship)
+        # Create game objects
+        self.ship = Ship(WIDTH // 2, HEIGHT // 2, self.ship_img, self.bullet_img)
+        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites.add(self.ship)
 
-def spawn_asteroid():
-    # Randomly choose the spawn location (edge of the screen)
-    edge = random.choice(["left", "right", "top", "bottom"])
+    def run(self):
+        # Main game loop
+        running = True
+        self.spawn_timer = 0
+        self.spawn_interval = FPS // 2
 
-    if edge == "left":
-        x = 0
-        y = random.randint(0, HEIGHT)
-    elif edge == "right":
-        x = WIDTH
-        y = random.randint(0, HEIGHT)
-    elif edge == "top":
-        x = random.randint(0, WIDTH)
-        y = 0
-    else:  # "bottom"
-        x = random.randint(0, WIDTH)
-        y = HEIGHT
+        while running:
+            self.clock.tick(FPS)
+            self.handle_events()
+            self.update()
+            self.draw()
 
-    # Create an asteroid and add it to the sprite group
-    asteroid_img = random.choice([asteroid_img_1, asteroid_img_2])
-    asteroid = Asteroid(x, y, asteroid_img, ship.rect.x, ship.rect.y)
-    all_sprites.add(asteroid)
+        pygame.quit()
+        sys.exit()
 
-# Main game loop
-running = True
-spawn_timer = 0
-spawn_interval = FPS // 2
+    def handle_events(self):
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-while running:
-    clock.tick(FPS)
+        # Check for bullet firing
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            bullet = self.ship.shoot()
+            self.all_sprites.add(bullet)
 
-    # Event handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-    
-    # Update game objects
-    spawn_timer += 1
-    if spawn_timer % spawn_interval == 0:
-        spawn_asteroid()
-    all_sprites.update()
+    def update(self):
+        # Update game objects
+        self.spawn_timer += 1
+        if self.spawn_timer % self.spawn_interval == 0:
+            self.spawn_asteroid()
+        self.all_sprites.update()
 
-    # Check for bullet firing
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_SPACE]:
-        bullet = ship.shoot()
-        all_sprites.add(bullet)
+    def draw(self):
+        # Draw the background image
+        self.screen.blit(self.background_img, (0, 0))
 
-    # Draw the background image
-    screen.blit(background_img, (0, 0))
+        # Render game objects
+        self.all_sprites.draw(self.screen)
+        pygame.display.flip()
 
-    # Render game objects
-    all_sprites.draw(screen)
-    pygame.display.flip()
+    def spawn_asteroid(self):
+        # Randomly choose the spawn location (edge of the screen)
+        self.edge = random.choice(["left", "right", "top", "bottom"])
 
-pygame.quit()
-sys.exit()
+        if self.edge == "left":
+            x = 0
+            y = random.randint(0, HEIGHT)
+        elif self.edge == "right":
+            x = WIDTH
+            y = random.randint(0, HEIGHT)
+        elif self.edge == "top":
+            x = random.randint(0, WIDTH)
+            y = 0
+        else:  # "bottom"
+            x = random.randint(0, WIDTH)
+            y = HEIGHT
+
+        # Create an asteroid and add it to the sprite group
+        self.asteroid_img = random.choice([self.asteroid_img_1, self.asteroid_img_2])
+        self.asteroid = Asteroid(x, y, self.asteroid_img, self.ship.rect.x, self.ship.rect.y)
+        self.all_sprites.add(self.asteroid)
+
+if __name__ == '__main__':
+    game = Game()
+    game.run()
