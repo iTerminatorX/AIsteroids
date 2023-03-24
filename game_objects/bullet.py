@@ -4,7 +4,7 @@ import math
 from config import HEIGHT, WIDTH, FPS
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y, angle, image, speed=800):
+    def __init__(self, x, y, angle, image, speed=15):
         super().__init__()
         self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(self.image, (8, 8))
@@ -16,8 +16,8 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         # Calculate the new position based on the bullet's angle and speed
-        dx = math.sin(math.radians(self.angle)) * self.speed / FPS
-        dy = -math.cos(math.radians(self.angle)) * self.speed / FPS  
+        dx = math.sin(math.radians(self.angle)) * self.speed
+        dy = -math.cos(math.radians(self.angle)) * self.speed
 
         # Update the bullet's position
         self.rect.x += dx

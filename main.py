@@ -18,7 +18,7 @@ class Game:
         # Load assets
         self.background_img = pygame.image.load("assets/background.jpg")
         self.background_img = pygame.transform.scale(self.background_img, (WIDTH, HEIGHT))
-        self.ship_img = "assets/spaceship_2.png"
+        self.ship_img = "assets/spaceship_6.png"
         self.bullet_img = "assets/bullet.png"
         self.asteroid_img_1 = "assets/asteroid_1.png"
         self.asteroid_img_2 = "assets/asteroid_2.png"
@@ -34,7 +34,7 @@ class Game:
         # Main game loop
         self.running = True
         self.spawn_timer = 0
-        self.spawn_interval = FPS // 15
+        self.spawn_interval = FPS // 1
         self.score = 0
         self.lives = 5
 
@@ -59,7 +59,8 @@ class Game:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             bullet = self.ship.shoot()
-            self.bullets.add(bullet)
+            if bullet:  
+                game.bullets.add(bullet)
 
     def update(self):
         # Update game objects

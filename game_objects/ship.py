@@ -19,6 +19,8 @@ class Ship(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.angle = 0
+        self.shoot_cooldown = 200 #milliseconds
+        self.shoot_timer = 0
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -53,6 +55,11 @@ class Ship(pygame.sprite.Sprite):
         self.rect.y += dy
 
     def shoot(self):
-        bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.bullet_img)
-        return bullet
+        current_time = pygame.time.get_ticks()
+        if current_time - self.shoot_timer > self.shoot_cooldown:
+            self.shoot_timer = current_time
+            bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.bullet_img)
+            return bullet
+        return None
+
 
