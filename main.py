@@ -18,7 +18,7 @@ class Game:
         # Load assets
         self.background_img = pygame.image.load("assets/background.jpg")
         self.background_img = pygame.transform.scale(self.background_img, (WIDTH, HEIGHT))
-        self.ship_img = "assets/spaceship.png"
+        self.ship_img = "assets/spaceship_6.png"
         self.bullet_img = "assets/bullet.png"
         self.asteroid_img_1 = "assets/asteroid_1.png"
         self.asteroid_img_2 = "assets/asteroid_2.png"
@@ -27,19 +27,23 @@ class Game:
         self.ship = Ship(WIDTH // 2, HEIGHT // 2, self.ship_img, self.bullet_img)
         self.all_sprites = pygame.sprite.Group()
         self.all_sprites.add(self.ship)
+        self.asteroids = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
 
     def run(self):
         # Main game loop
-        running = True
+        self.running = True
         self.spawn_timer = 0
         self.spawn_interval = FPS // 2
+        self.score = 0
 
-        while running:
+        while self.running:
             self.clock.tick(FPS)
             self.handle_events()
+            self.handle_collisions()
             self.update()
             self.draw()
-
+        print(self.score)
         pygame.quit()
         sys.exit()
 
@@ -47,13 +51,13 @@ class Game:
         # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                self.running = False
 
         # Check for bullet firing
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             bullet = self.ship.shoot()
-            self.all_sprites.add(bullet)
+            self.bullets.add(bullet)
 
     def update(self):
         # Update game objects
@@ -61,6 +65,8 @@ class Game:
         if self.spawn_timer % self.spawn_interval == 0:
             self.spawn_asteroid()
         self.all_sprites.update()
+        self.asteroids.update()
+        self.bullets.update()
 
     def draw(self):
         # Draw the background image
@@ -68,6 +74,8 @@ class Game:
 
         # Render game objects
         self.all_sprites.draw(self.screen)
+        self.asteroids.draw(self.screen)
+        self.bullets.draw(self.screen)
         pygame.display.flip()
 
     def spawn_asteroid(self):
@@ -90,7 +98,12 @@ class Game:
         # Create an asteroid and add it to the sprite group
         self.asteroid_img = random.choice([self.asteroid_img_1, self.asteroid_img_2])
         self.asteroid = Asteroid(x, y, self.asteroid_img, self.ship.rect.x, self.ship.rect.y)
-        self.all_sprites.add(self.asteroid)
+        self.asteroids.add(self.asteroid)
+
+    def handle_collisions(self):
+        self.collisions = pygame.sprite.groupcollide(self.asteroids, self.bullets, True, True)
+        for asteroid in self.collisions:
+            self.score += 1
 
 if __name__ == '__main__':
     game = Game()

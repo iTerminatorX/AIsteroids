@@ -30,7 +30,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.move()
         self.check_collision()
 
-        # Remove the bullet if it goes off-screen
+        # Remove the asteroid if it goes off-screen
         if self.rect.right < 0 or self.rect.left > WIDTH or self.rect.top > HEIGHT or self.rect.bottom < 0:
             self.kill()
 
@@ -43,8 +43,3 @@ class Asteroid(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, -self.rotation_speed)
         self.rotation_speed = (self.rotation_speed + 2) % 360
         self.rect = self.image.get_rect(center=self.rect.center)
-
-    def check_collision(self):
-        # Check for collisions with the ship or bullets
-        pass
-
