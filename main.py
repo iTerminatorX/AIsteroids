@@ -34,7 +34,7 @@ class Game:
         # Main game loop
         self.running = True
         self.spawn_timer = 0
-        self.spawn_interval = FPS // 1
+        self.spawn_interval = FPS // 5
         self.score = 0
         self.lives = 5
 
@@ -45,7 +45,7 @@ class Game:
             self.handle_collisions_ship()
             self.update()
             self.draw()
-        print(self.score)
+
         pygame.quit()
         sys.exit()
 
